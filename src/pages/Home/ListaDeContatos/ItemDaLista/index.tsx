@@ -19,7 +19,7 @@ const Perfil = styled.div`
 
 const PerfilImagem = styled.img`
     height: 24px;
-    object-fit: contain;
+    object-fit: cover;
     width: 24px;
 `
 
