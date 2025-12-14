@@ -28,11 +28,12 @@ a:hover {
 }
 
 body {
+    align-items: center;
     display: flex;
-    margin: 0;
+    justify-content: center;
+    margin: 20px 0;
     min-height: 100vh;
     min-width: 320px;
-    place-items: center;
 }
 
 h1 {
