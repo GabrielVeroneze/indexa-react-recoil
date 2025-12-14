@@ -12,49 +12,53 @@ function tratarResposta(resposta: Response) {
 }
 
 export const apiContatos = {
-    resgatarContatos() {
-        return fetch(baseURL)
-            .then(tratarResposta)
-            .catch(() => {
-                throw new Error('Erro ao buscar contatos')
-            })
+    async resgatarContatos(): Promise<Contato[]> {
+        try {
+            const resposta = await fetch(baseURL)
+            return tratarResposta(resposta)
+        } catch {
+            throw new Error('Erro ao buscar contatos')
+        }
     },
 
-    criar(contato: Contato) {
-        return fetch(baseURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(contato),
-        })
-            .then(tratarResposta)
-            .catch(() => {
-                throw new Error('Erro ao criar contato')
+    async criar(contato: Contato): Promise<Contato> {
+        try {
+            const resposta = await fetch(baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(contato),
             })
+            return tratarResposta(resposta)
+        } catch {
+            throw new Error('Erro ao criar contato')
+        }
     },
 
-    atualizar(id: number, contato: Contato) {
-        return fetch(`${baseURL}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(contato),
-        })
-            .then(tratarResposta)
-            .catch(() => {
-                throw new Error('Erro ao atualizar contato')
+    async atualizar(id: number, contato: Contato): Promise<Contato> {
+        try {
+            const resposta = await fetch(`${baseURL}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(contato),
             })
+            return tratarResposta(resposta)
+        } catch {
+            throw new Error('Erro ao atualizar contato')
+        }
     },
 
-    deletar(id: number) {
-        return fetch(`${baseURL}/${id}`, {
-            method: 'DELETE',
-        })
-            .then(tratarResposta)
-            .catch(() => {
-                throw new Error('Erro ao deletar contato')
+    async deletar(id: number): Promise<void> {
+        try {
+            const resposta = await fetch(`${baseURL}/${id}`, {
+                method: 'DELETE',
             })
+            return tratarResposta(resposta)
+        } catch {
+            throw new Error('Erro ao deletar contato')
+        }
     },
 }
