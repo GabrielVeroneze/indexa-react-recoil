@@ -1,10 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import '@/styles/global.css'
+import { RecoilRoot } from 'recoil'
 import AppRoutes from '@/routes'
+import '@/styles/global.css'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <AppRoutes />
+        <RecoilRoot>
+            <AppRoutes />
+        </RecoilRoot>
     </StrictMode>,
 )
