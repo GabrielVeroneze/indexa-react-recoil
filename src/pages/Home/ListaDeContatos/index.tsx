@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useMemo } from 'react'
+import { useContatos } from '@/hooks/useContatos'
 import type { Contato } from '@/types/Contato'
 import styled from 'styled-components'
 import ItemDaLista from './ItemDaLista'
@@ -24,59 +25,51 @@ const ContatoLista = styled.ul`
     padding: 0;
 `
 
-const contatosIniciais: Contato[] = [
-    {
-        nome: 'moni',
-        telefone: '21321312',
-        imagem: 'https://fastly.picsum.photos/id/338/200/300.jpg?hmac=rE5P3WDLKY1VMpd9y_FLo_OKhTzG4_3zCbGjKvgOL5w',
-        id: 1,
-    },
-]
-
 type ContatosAgrupados = Record<string, Contato[]>
 
 function ListaDeContatos() {
-    const [contatosAgrupados, setContatosAgrupados] =
-        useState<ContatosAgrupados>({})
+    const { contatos } = useContatos()
 
-    useEffect(() => {
-        const agrupados = contatosIniciais.reduce<ContatosAgrupados>(
-            (acumulador, contato) => {
-                const primeiraLetra = contato.nome[0].toUpperCase()
+    const contatosAgrupados = useMemo(() => {
+        return contatos.reduce<ContatosAgrupados>((acumulador, contato) => {
+            const primeiraLetra = contato.nome[0].toUpperCase()
 
-                if (!acumulador[primeiraLetra]) {
-                    acumulador[primeiraLetra] = []
-                }
+            if (!acumulador[primeiraLetra]) {
+                acumulador[primeiraLetra] = []
+            }
 
-                acumulador[primeiraLetra].push(contato)
+            acumulador[primeiraLetra].push(contato)
 
-                return acumulador
-            },
-            {},
-        )
+            return acumulador
+        }, {})
+    }, [contatos])
 
-        const agrupadosOrdenados = Object.keys(agrupados)
+    const contatosAgrupadosOrdenados = useMemo(() => {
+        return Object.keys(contatosAgrupados)
             .sort()
             .reduce<ContatosAgrupados>((acumulador, chave) => {
-                acumulador[chave] = agrupados[chave].sort((a, b) =>
+                acumulador[chave] = contatosAgrupados[chave].sort((a, b) =>
                     a.nome.localeCompare(b.nome),
                 )
                 return acumulador
             }, {})
-
-        setContatosAgrupados(agrupadosOrdenados)
-    }, [])
+    }, [contatosAgrupados])
 
     return (
         <ContatosWrapper>
-            {Object.keys(contatosAgrupados).length > 0 ? (
-                Object.keys(contatosAgrupados).map((letra) => (
+            {Object.keys(contatosAgrupadosOrdenados).length > 0 ? (
+                Object.keys(contatosAgrupadosOrdenados).map((letra) => (
                     <ContatoGrupo key={letra}>
                         <ContatoTitulo>{letra}</ContatoTitulo>
                         <ContatoLista>
-                            {contatosAgrupados[letra].map((contato) => (
-                                <ItemDaLista key={contato.id} item={contato} />
-                            ))}
+                            {contatosAgrupadosOrdenados[letra].map(
+                                (contato) => (
+                                    <ItemDaLista
+                                        key={contato.id}
+                                        item={contato}
+                                    />
+                                ),
+                            )}
                         </ContatoLista>
                     </ContatoGrupo>
                 ))
