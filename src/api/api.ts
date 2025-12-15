@@ -1,4 +1,5 @@
 import type { Contato } from '@/types/Contato'
+import type { DadosForm } from '@/types/DadosForm'
 
 const baseURL = 'http://localhost:3001/contatos'
 
@@ -21,7 +22,7 @@ export const apiContatos = {
         }
     },
 
-    async criar(contato: Contato): Promise<Contato> {
+    async criar(contato: DadosForm): Promise<Contato> {
         try {
             const resposta = await fetch(baseURL, {
                 method: 'POST',
