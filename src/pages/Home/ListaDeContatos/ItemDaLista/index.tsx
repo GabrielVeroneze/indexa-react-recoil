@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router'
+import { useContatos } from '@/hooks/useContatos'
 import type { Contato } from '@/types/Contato'
 import styled from 'styled-components'
 import editIcon from '@/assets/pencil-square.svg'
@@ -67,6 +68,24 @@ interface ItemDaListaProps {
 }
 
 function ItemDaLista({ item }: ItemDaListaProps) {
+    const { deletarContato } = useContatos()
+
+    const removerContato = async () => {
+        const confirmarRemocao = window.confirm(
+            `Você tem certeza que deseja excluir o contato ${item.nome}?`,
+        )
+
+        if (confirmarRemocao) {
+            try {
+                await deletarContato(item.id)
+
+                alert(`Contato ${item.nome} foi deletado com sucesso!`)
+            } catch {
+                alert(`Aconteceu uma falha em deletar o contato ${item.nome}!`)
+            }
+        }
+    }
+
     return (
         <ListItem>
             <Perfil>
@@ -78,7 +97,7 @@ function ItemDaLista({ item }: ItemDaListaProps) {
                 <BotaoEditar to={`/editar/${item.id}`}>
                     <img src={editIcon} alt="Editar" />
                 </BotaoEditar>
-                <BotaoExcluir>
+                <BotaoExcluir onClick={removerContato}>
                     <img src={deleteIcon} alt="Excluir" />
                 </BotaoExcluir>
             </Icones>
