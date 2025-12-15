@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRecoilState } from 'recoil'
 import { useNavigate } from 'react-router'
+import { pesquisaState } from '@/atoms/contatosState'
 import styled from 'styled-components'
 import Wrapper from '@/components/Wrapper'
 import Header from '@/components/Header'
@@ -37,7 +38,7 @@ const MainContainer = styled.main`
 
 function Home() {
     const navigate = useNavigate()
-    const [search, setSearch] = useState('')
+    const [search, setSearch] = useRecoilState(pesquisaState)
 
     return (
         <Wrapper>
