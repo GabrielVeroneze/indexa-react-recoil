@@ -37,7 +37,7 @@ export const apiContatos = {
         }
     },
 
-    async atualizar(id: number, contato: Contato): Promise<Contato> {
+    async atualizar(id: number, contato: DadosForm): Promise<Contato> {
         try {
             const resposta = await fetch(`${baseURL}/${id}`, {
                 method: 'PUT',
