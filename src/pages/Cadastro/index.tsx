@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { useContatos } from '@/hooks/useContatos'
 import type { DadosForm } from '@/types/DadosForm'
 import Wrapper from '@/components/Wrapper'
 import Header from '@/components/Header'
@@ -10,6 +11,7 @@ import Formulario from '@/components/Formulario'
 
 function Cadastro() {
     const navigate = useNavigate()
+    const { addContatos } = useContatos()
     const [dadosDoFormulario, setDadosDoFormulario] = useState<DadosForm>({
         nome: '',
         telefone: '',
@@ -24,8 +26,16 @@ function Cadastro() {
         }))
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        console.log('Formulário enviado!')
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        try {
+            await addContatos(dadosDoFormulario)
+
+            navigate('/')
+        } catch (erro) {
+            console.error('Erro ao adicionar o contato', erro)
+        }
     }
 
     return (
