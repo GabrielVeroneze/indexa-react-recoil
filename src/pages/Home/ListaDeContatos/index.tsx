@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
 import { useContatos } from '@/hooks/useContatos'
+import { contatosFiltradosSelector } from '@/atoms/contatosState'
 import type { Contato } from '@/types/Contato'
 import styled from 'styled-components'
 import ItemDaLista from './ItemDaLista'
@@ -29,9 +31,10 @@ type ContatosAgrupados = Record<string, Contato[]>
 
 function ListaDeContatos() {
     const { contatos } = useContatos()
+    const contatosFiltrados = useRecoilValue(contatosFiltradosSelector)
 
     const contatosAgrupados = useMemo(() => {
-        return contatos.reduce<ContatosAgrupados>((acumulador, contato) => {
+        return contatosFiltrados.reduce<ContatosAgrupados>((acumulador, contato) => {
             const primeiraLetra = contato.nome[0].toUpperCase()
 
             if (!acumulador[primeiraLetra]) {
@@ -42,7 +45,7 @@ function ListaDeContatos() {
 
             return acumulador
         }, {})
-    }, [contatos])
+    }, [contatosFiltrados])
 
     const contatosAgrupadosOrdenados = useMemo(() => {
         return Object.keys(contatosAgrupados)
